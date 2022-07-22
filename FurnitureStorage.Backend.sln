@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FurnitureStorage.WebApi", "FurnitureStorage.WebApi\FurnitureStorage.WebApi.csproj", "{AF467A9B-F315-4A7A-B639-5AD63107217B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FurnitureStorage.Domain", "FurnitureStorage.Domain\FurnitureStorage.Domain.csproj", "{49ACA091-2366-47D8-98B7-C4F2F6850609}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF467A9B-F315-4A7A-B639-5AD63107217B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF467A9B-F315-4A7A-B639-5AD63107217B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF467A9B-F315-4A7A-B639-5AD63107217B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF467A9B-F315-4A7A-B639-5AD63107217B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49ACA091-2366-47D8-98B7-C4F2F6850609}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49ACA091-2366-47D8-98B7-C4F2F6850609}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49ACA091-2366-47D8-98B7-C4F2F6850609}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49ACA091-2366-47D8-98B7-C4F2F6850609}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {46386ABC-B17B-4085-AED7-968CD85C21AF}
+	EndGlobalSection
+EndGlobal
