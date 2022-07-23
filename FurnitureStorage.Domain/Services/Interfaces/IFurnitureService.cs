@@ -10,14 +10,14 @@ namespace FurnitureStorage.Domain.Services.Interfaces
 {
     public interface IFurnitureService
     {
-        Task<ServiceResponse<List<GetFurnitureDto>>> GetAll();
+        Task<Result<List<GetFurnitureDto>>> GetAllAsync();
 
-        Task<ServiceResponse<GetFurnitureDto>> GetById(int id);
+        Task<Result<GetFurnitureDto>> GetByIdAsync(int id);
 
-        Task<ServiceResponse<List<GetFurnitureDto>>> Add(AddFurnitureDto newFurniture);
+        Task<Result<List<GetFurnitureDto>>> AddAsync(AddFurnitureDto newFurniture);
 
-        Task<ServiceResponse<GetFurnitureDto>> Update(int id, UpdateFurnitureDto updatedFurniture);
+        Task<Result<GetFurnitureDto>> UpdateAsync(int id, UpdateFurnitureDto updatedFurniture);
 
-        Task<ServiceResponse<List<GetFurnitureDto>>> Delete(int id);
+        Task<Result<List<GetFurnitureDto>>> DeleteAsync(int id);
     }
 }

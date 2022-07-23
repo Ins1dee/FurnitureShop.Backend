@@ -18,52 +18,52 @@ namespace FurnitureStorage.WebApi.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<GetFurnitureDto>>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(await furnitureService.GetAll());
+            return Ok(await furnitureService.GetAllAsync());
         }
 
         [HttpGet("GetById/{id}")]
-        public async Task<ActionResult<ServiceResponse<GetFurnitureDto>>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var serviceResponse = await furnitureService.GetById(id);
-            if (serviceResponse.Data is null)
+            var result = await furnitureService.GetByIdAsync(id);
+            if (result.Data is null)
             {
-                return NotFound(serviceResponse);
+                return NotFound(result);
             }
 
-            return Ok(serviceResponse);
+            return Ok(result);
         }
 
         [HttpPost("Add")]
-        public async Task<ActionResult<ServiceResponse<List<GetFurnitureDto>>>> Add(AddFurnitureDto newFurniture)
+        public async Task<IActionResult> Add(AddFurnitureDto newFurniture)
         {
-            return Ok(await furnitureService.Add(newFurniture));
+            return Ok(await furnitureService.AddAsync(newFurniture));
         }
 
         [HttpPut("Update/{id}")]
-        public async Task<ActionResult<ServiceResponse<GetFurnitureDto>>> Update(int id, UpdateFurnitureDto updatedFurniture)
+        public async Task<IActionResult> Update(int id, UpdateFurnitureDto updatedFurniture)
         {
-            var serviceResponse = await furnitureService.Update(id, updatedFurniture);
-            if(serviceResponse.Data is null)
+            var result = await furnitureService.UpdateAsync(id, updatedFurniture);
+            if(result.Data is null)
             {
-                return NotFound(serviceResponse);
+                return NotFound(result);
             }
 
-            return Ok(serviceResponse);
+            return Ok(result);
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<ActionResult<ServiceResponse<GetFurnitureDto>>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var serviceResponse = await furnitureService.Delete(id);
+            var result = await furnitureService.DeleteAsync(id);
 
-            if(serviceResponse.Data is null)
+            if(result.Data is null)
             {
-                return NotFound(serviceResponse);
+                return NotFound(result);
             }
 
-            return Ok(serviceResponse);
+            return Ok(result);
         }
     }
 }

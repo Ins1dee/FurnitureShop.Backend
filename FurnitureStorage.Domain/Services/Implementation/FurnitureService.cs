@@ -26,76 +26,68 @@ namespace FurnitureStorage.Domain.Services.Implementation
             this.mapper = mapper;
         }
 
-        public async Task<ServiceResponse<List<GetFurnitureDto>>> Add(AddFurnitureDto newFurniture)
+        public async Task<Result<List<GetFurnitureDto>>> AddAsync(AddFurnitureDto newFurniture)
         {
-            var serviceResponse = new ServiceResponse<List<GetFurnitureDto>>();
             Furniture addFurniture = mapper.Map<Furniture>(newFurniture);
             addFurniture.Id = furniture.Max(f => f.Id) + 1;
             furniture.Add(addFurniture);
-            serviceResponse.Data = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
+            var result = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
 
-            return serviceResponse;
+            return Result.Ok(result);
         }
 
-        public async Task<ServiceResponse<List<GetFurnitureDto>>> GetAll()
+        public async Task<Result<List<GetFurnitureDto>>> GetAllAsync()
         {
-            return new ServiceResponse<List<GetFurnitureDto>> 
-            { 
-                Data = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList() 
-            };
+            var result = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
+
+            return result is null ? Result.Failed<List<GetFurnitureDto>>("No products found!")
+                                  :  Result.Ok(result);
         }
 
-        public async Task<ServiceResponse<GetFurnitureDto>> GetById(int id)
+        public async Task<Result<GetFurnitureDto>> GetByIdAsync(int id)
         {
-            var serviceResponse = new ServiceResponse<GetFurnitureDto>();
             try
             {
-                serviceResponse.Data = mapper.Map<GetFurnitureDto>(furniture.First(f => f.Id == id));
+                var result = mapper.Map<GetFurnitureDto>(furniture.First(f => f.Id == id));
+
+                return Result.Ok(result);
             }
             catch(Exception ex)
             {
-                serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
+                return Result.Failed<GetFurnitureDto>(ex.Message);
             }
-
-            return serviceResponse;
         }
 
-        public async Task<ServiceResponse<GetFurnitureDto>> Update(int id, UpdateFurnitureDto updatedFurniture)
+        public async Task<Result<GetFurnitureDto>> UpdateAsync(int id, UpdateFurnitureDto updatedFurniture)
         {
-            ServiceResponse<GetFurnitureDto> serviceResponse = new ServiceResponse<GetFurnitureDto>();
             try
             {
                 Furniture furnitureToUpdate = furniture.First(f => f.Id == id);
                 mapper.Map(updatedFurniture, furnitureToUpdate);
-                serviceResponse.Data = mapper.Map<GetFurnitureDto>(furnitureToUpdate);
+                var result = mapper.Map<GetFurnitureDto>(furnitureToUpdate);
+
+                return Result.Ok(result);
             }
             catch(Exception ex)
             {
-                serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
+                return Result.Failed<GetFurnitureDto>(ex.Message);
             }
-
-            return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetFurnitureDto>>> Delete(int id)
+        public async Task<Result<List<GetFurnitureDto>>> DeleteAsync(int id)
         {
-            ServiceResponse<List<GetFurnitureDto>> serviceResponse = new ServiceResponse<List<GetFurnitureDto>>();
-            
             try
             {
                 var furnitureToDelete = furniture.First(f => f.Id == id);
                 furniture.Remove(furnitureToDelete);
-                serviceResponse.Data = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
+                var result = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
+
+                return Result.Ok(result);
             }
             catch(Exception ex)
             {
-                serviceResponse.Success = false;
-                serviceResponse.Message = ex.Message;
+                return Result.Failed<List<GetFurnitureDto>>(ex.Message);
             }
-
-            return serviceResponse;
         }
     }
 }
