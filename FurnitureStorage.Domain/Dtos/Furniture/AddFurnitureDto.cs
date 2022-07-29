@@ -1,4 +1,6 @@
-﻿using FurnitureStorage.Domain.Models;
+﻿using FurnitureStorage.Data.Entities;
+using FurnitureStorage.Domain.Dtos.DimensionsDtos;
+using FurnitureStorage.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace FurnitureStorage.Domain.Dtos.Furniture
     {
         public string Name { get; set; } = string.Empty;
 
-        public Dimensions FurnitureDimensions { get; set; } = new Dimensions();
+        public DimensionsDto FurnitureDimensions { get; set; } = new DimensionsDto();
 
         public string Description { get; set; } = string.Empty;
 

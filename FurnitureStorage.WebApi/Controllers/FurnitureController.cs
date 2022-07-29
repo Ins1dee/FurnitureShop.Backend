@@ -41,10 +41,10 @@ namespace FurnitureStorage.WebApi.Controllers
             return Ok(await furnitureService.AddAsync(newFurniture));
         }
 
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update(int id, UpdateFurnitureDto updatedFurniture)
+        [HttpPut("Update")]
+        public async Task<IActionResult> Update(UpdateFurnitureDto updatedFurniture)
         {
-            var result = await furnitureService.UpdateAsync(id, updatedFurniture);
+            var result = await furnitureService.UpdateAsync(updatedFurniture);
             if(result.Data is null)
             {
                 return NotFound(result);
@@ -57,7 +57,6 @@ namespace FurnitureStorage.WebApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await furnitureService.DeleteAsync(id);
-
             if(result.Data is null)
             {
                 return NotFound(result);

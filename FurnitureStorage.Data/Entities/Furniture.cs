@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FurnitureStorage.Domain.Models
+namespace FurnitureStorage.Data.Entities
 {
-    public class Furniture
+    public class Furniture : IEntity
     {
         public int Id { get; set; }
 
@@ -18,6 +18,8 @@ namespace FurnitureStorage.Domain.Models
 
         public string Brand { get; set; } = string.Empty;
 
-        public double Price { get; set; }
+        public double Price { get; set; } = 0;
+
+        public int Count { get; set; } = 0;
     }
 }

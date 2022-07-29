@@ -4,21 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FurnitureStorage.Domain.Models
+namespace FurnitureStorage.Domain.Dtos.DimensionsDtos
 {
-    public struct Dimensions
+    public class DimensionsDto
     {
         public double Width { get; set; }
 
         public double Height { get; set; }
 
         public double Length { get; set; }
-
-        public Dimensions(double width, double height, double length)
-        {
-            Width = width;
-            Height = height;
-            Length = length;
-        }
     }
 }

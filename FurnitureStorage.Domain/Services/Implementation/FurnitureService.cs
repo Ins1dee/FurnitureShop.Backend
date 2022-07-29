@@ -1,93 +1,89 @@
 ﻿using AutoMapper;
+using FurnitureStorage.Data.Entities;
+using FurnitureStorage.Data.Infrastructure;
 using FurnitureStorage.Domain.Dtos.Furniture;
 using FurnitureStorage.Domain.Models;
 using FurnitureStorage.Domain.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace FurnitureStorage.Domain.Services.Implementation
 {
     public class FurnitureService : IFurnitureService
     {
-
-        private static List<Furniture> furniture = new List<Furniture>
-        {
-            new Furniture { Id = 0, Name = "Comfort chair", FurnitureDimensions = new Dimensions(70, 12, 20) },
-            new Furniture { Id = 1, Name = "Comfort bed", FurnitureDimensions = new Dimensions(80, 20, 30) }
-        };
-
+        private readonly IRepository<Furniture> furnitureRepository;
         private readonly IMapper mapper;
 
-        public FurnitureService(IMapper mapper)
+        public FurnitureService(IRepository<Furniture> furnitureRepository, IMapper mapper)
         {
+            this.furnitureRepository = furnitureRepository;
             this.mapper = mapper;
         }
 
         public async Task<Result<List<GetFurnitureDto>>> AddAsync(AddFurnitureDto newFurniture)
         {
             Furniture addFurniture = mapper.Map<Furniture>(newFurniture);
-            addFurniture.Id = furniture.Max(f => f.Id) + 1;
-            furniture.Add(addFurniture);
-            var result = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
+
+            //addFurniture.Id = furnitureRepository.Query().Max(f => f.Id) + 1;
+            addFurniture.FurnitureDimensions = mapper.Map<Dimensions>(newFurniture.FurnitureDimensions);
+            await furnitureRepository.AddAsync(addFurniture);
+            await furnitureRepository.SaveChangesAsync();
+            var result = furnitureRepository.Query().Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
 
             return Result.Ok(result);
         }
 
         public async Task<Result<List<GetFurnitureDto>>> GetAllAsync()
         {
-            var result = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
+            var result = await furnitureRepository
+                .Query()
+                .Include(f => f.FurnitureDimensions)
+                .Select(f => mapper.Map<GetFurnitureDto>(f))
+                .ToListAsync();
 
-            return result is null ? Result.Failed<List<GetFurnitureDto>>("No products found!")
-                                  :  Result.Ok(result);
+            return result.Count() == 0 ? Result.Failed<List<GetFurnitureDto>>("No products found!")
+                                  : Result.Ok(result);
         }
 
         public async Task<Result<GetFurnitureDto>> GetByIdAsync(int id)
         {
-            try
-            {
-                var result = mapper.Map<GetFurnitureDto>(furniture.First(f => f.Id == id));
+            var result = mapper.Map<GetFurnitureDto>(await furnitureRepository.GetByIdAsync(id));
 
-                return Result.Ok(result);
-            }
-            catch(Exception ex)
-            {
-                return Result.Failed<GetFurnitureDto>(ex.Message);
-            }
+            return result is null ? Result.Failed<GetFurnitureDto>("No product with such id found!")
+                                  : Result.Ok(result);
+
         }
 
-        public async Task<Result<GetFurnitureDto>> UpdateAsync(int id, UpdateFurnitureDto updatedFurniture)
+        public async Task<Result<GetFurnitureDto>> UpdateAsync(UpdateFurnitureDto updatedFurniture)
         {
-            try
-            {
-                Furniture furnitureToUpdate = furniture.First(f => f.Id == id);
-                mapper.Map(updatedFurniture, furnitureToUpdate);
-                var result = mapper.Map<GetFurnitureDto>(furnitureToUpdate);
 
-                return Result.Ok(result);
-            }
-            catch(Exception ex)
+            var furnitureToUpdate = await furnitureRepository.GetByIdAsync(updatedFurniture.Id);
+
+            if (furnitureToUpdate != null)
             {
-                return Result.Failed<GetFurnitureDto>(ex.Message);
+                mapper.Map(updatedFurniture, furnitureToUpdate);
+                await furnitureRepository.SaveChangesAsync();
             }
+
+            var result = mapper.Map<GetFurnitureDto>(furnitureToUpdate);
+
+            return result is null ? Result.Failed<GetFurnitureDto>("No product with such id found!")
+                                  : Result.Ok(result);
         }
 
         public async Task<Result<List<GetFurnitureDto>>> DeleteAsync(int id)
         {
-            try
-            {
-                var furnitureToDelete = furniture.First(f => f.Id == id);
-                furniture.Remove(furnitureToDelete);
-                var result = furniture.Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
+            var furnitureToDelete = await furnitureRepository.GetByIdAsync(id);
 
-                return Result.Ok(result);
-            }
-            catch(Exception ex)
+            if (furnitureToDelete is null)
             {
-                return Result.Failed<List<GetFurnitureDto>>(ex.Message);
+                return Result.Failed<List<GetFurnitureDto>>("No product with such id found!");
             }
+
+            furnitureRepository.Delete(furnitureToDelete);
+            furnitureRepository.SaveChangesAsync();
+            var result = furnitureRepository.Query().Select(f => mapper.Map<GetFurnitureDto>(f)).ToList();
+
+            return Result.Ok(result);
         }
     }
 }

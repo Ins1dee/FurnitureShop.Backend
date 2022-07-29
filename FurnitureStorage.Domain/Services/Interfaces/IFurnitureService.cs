@@ -16,7 +16,7 @@ namespace FurnitureStorage.Domain.Services.Interfaces
 
         Task<Result<List<GetFurnitureDto>>> AddAsync(AddFurnitureDto newFurniture);
 
-        Task<Result<GetFurnitureDto>> UpdateAsync(int id, UpdateFurnitureDto updatedFurniture);
+        Task<Result<GetFurnitureDto>> UpdateAsync(UpdateFurnitureDto updatedFurniture);
 
         Task<Result<List<GetFurnitureDto>>> DeleteAsync(int id);
     }
