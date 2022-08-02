@@ -12,6 +12,9 @@ namespace FurnitureStorage.Data.Context
     {
         public DbSet<Furniture> Furniture => Set<Furniture>();
         public DbSet<Dimensions> Dimensions => Set<Dimensions>();
+        public DbSet<Order> Orders => Set<Order>();
+
+        public DbSet<OrderProduct> OrderProducts => Set<OrderProduct>();
 
         public FurnitureStorageContext(DbContextOptions<FurnitureStorageContext> options) : base(options)
         {

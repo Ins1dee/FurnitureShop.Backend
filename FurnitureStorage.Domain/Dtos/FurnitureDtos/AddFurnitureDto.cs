@@ -7,12 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FurnitureStorage.Domain.Dtos.Furniture
+namespace FurnitureStorage.Domain.Dtos.FurnitureDtos
 {
-    public class GetFurnitureDto
+    public class AddFurnitureDto
     {
-        public int Id { get; set; }
-
         public string Name { get; set; } = string.Empty;
 
         public DimensionsDto FurnitureDimensions { get; set; } = new DimensionsDto();

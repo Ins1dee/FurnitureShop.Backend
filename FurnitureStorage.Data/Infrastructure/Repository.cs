@@ -29,6 +29,16 @@ namespace FurnitureStorage.Data.Infrastructure
             return query ?? dbSet;
         }
 
+        public Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            return dbEntities.AddRangeAsync(entities);
+        }
+
+        public async Task DeleteRangeAsync(IEnumerable<TEntity> entities)
+        {
+            await Task.Run(() => entities.ToList().ForEach(item => context.Entry(item).State = EntityState.Deleted));
+        }
+
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             CheckEntityForNull(entity);
@@ -41,9 +51,9 @@ namespace FurnitureStorage.Data.Infrastructure
             context.Entry(entity).State = EntityState.Deleted;
         }
 
-        public ValueTask<TEntity> GetByIdAsync(params object[] keys)
+        public async ValueTask<TEntity> GetByIdAsync(params object[] keys)
         {
-            return dbEntities.FindAsync(keys);
+            return await dbEntities.FindAsync(keys);
         }
 
         public async Task<int> SaveChangesAsync()

@@ -21,9 +21,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IFurnitureService, FurnitureService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddDbContext<FurnitureStorageContext>(options =>
                   options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"), x => x.MigrationsAssembly("FurnitureStorage.Data")));
 builder.Services.AddScoped<IRepository<Furniture>, Repository<Furniture>>();
+builder.Services.AddScoped<IRepository<Order>, Repository<Order>>();
 
 var app = builder.Build();
 

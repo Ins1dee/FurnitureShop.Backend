@@ -13,12 +13,16 @@ namespace FurnitureStorage.Data.Infrastructure
 
         Task<TEntity> AddAsync(TEntity entity);
 
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
+
         Task<TEntity> UpdateAsync(TEntity entity);
 
         Task<int> SaveChangesAsync();
 
         ValueTask<TEntity> GetByIdAsync(params object[] keys);
 
-        public void Delete(TEntity entity);
+        void Delete(TEntity entity);
+
+        Task DeleteRangeAsync(IEnumerable<TEntity> entities);
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FurnitureStorage.Domain.Dtos.Furniture
+namespace FurnitureStorage.Domain.Dtos.FurnitureDtos
 {
     public class UpdateFurnitureDto
     {

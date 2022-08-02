@@ -1,4 +1,4 @@
-﻿using FurnitureStorage.Domain.Dtos.Furniture;
+﻿using FurnitureStorage.Domain.Dtos.FurnitureDtos;
 using FurnitureStorage.Domain.Models;
 using System;
 using System.Collections.Generic;

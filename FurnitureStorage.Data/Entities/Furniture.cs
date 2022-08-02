@@ -19,7 +19,5 @@ namespace FurnitureStorage.Data.Entities
         public string Brand { get; set; } = string.Empty;
 
         public double Price { get; set; } = 0;
-
-        public int Count { get; set; } = 0;
     }
 }
