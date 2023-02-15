@@ -1,4 +1,6 @@
-﻿namespace FurnitureShop.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FurnitureShop.Data.Entities
 {
     public class Dimensions
     {

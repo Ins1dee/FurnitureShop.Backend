@@ -8,7 +8,7 @@ namespace FurnitureShop.Domain.Dtos.OrderDtos
 
         public string Name { get; set; } = string.Empty;
 
-        public List<GetOrderProductDto> Products { get; set; } = new List<GetOrderProductDto>();
+        public List<GetShoppingCartItemDto> Products { get; set; } = new List<GetShoppingCartItemDto>();
 
         public string CustomerName { get; set; } = string.Empty;
 

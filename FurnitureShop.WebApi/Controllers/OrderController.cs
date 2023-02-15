@@ -1,11 +1,14 @@
 ﻿using FurnitureShop.Domain.Dtos.OrderDtos;
 using FurnitureShop.Domain.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FurnitureShop.WebApi.Controllers
 {
     [Route("api/orders")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService orderService;
@@ -18,7 +21,7 @@ namespace FurnitureShop.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await orderService.GetAllAsync());
+            return Ok(await orderService.GetOrdersAsync(User.FindFirstValue(ClaimTypes.Email)));
         }
 
         [HttpGet("{id}")]
@@ -34,9 +37,10 @@ namespace FurnitureShop.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateOrderDto newOrder)
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto newOrder)
         {
-            return Ok(await orderService.CreateAsync(newOrder));
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            return Ok(await orderService.CreateAsync(newOrder, userEmail));
         }
 
         [HttpDelete("{id}")]

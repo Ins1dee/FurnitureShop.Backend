@@ -3,7 +3,7 @@ using FurnitureShop.Data.Entities;
 using FurnitureShop.Data.Infrastructure;
 using FurnitureShop.Domain.Services.Implementation;
 using FurnitureShop.Domain.Services.Interfaces;
-using FurnitureShop.WebApi.Extensions;
+using FurnitureShop.WebApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +25,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureCors();
 builder.Services.ConfigureDbServices(builder.Configuration);
+builder.Services.ConfigureFluentValidation();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 ﻿using FurnitureShop.Data.Entities;
+using FurnitureShop.Domain.Dtos.TokenDtos;
 using FurnitureShop.Domain.Dtos.TokensDtos;
 using FurnitureShop.Domain.Dtos.UserDtos;
 using FurnitureShop.Domain.Services.Interfaces;
@@ -41,7 +42,7 @@ namespace FurnitureShop.WebApi.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] string userEmail)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto refreshTokenDto)
         {
             var refreshToken = Request.Cookies["refreshToken"];
 
@@ -50,7 +51,7 @@ namespace FurnitureShop.WebApi.Controllers
                 return BadRequest("Refresh token is null");
             }
 
-            var result = await authenticationService.RefreshTokenAsync(refreshToken, userEmail);
+            var result = await authenticationService.RefreshTokenAsync(refreshToken, refreshTokenDto.Email);
 
             if (result.Succeeded)
             {

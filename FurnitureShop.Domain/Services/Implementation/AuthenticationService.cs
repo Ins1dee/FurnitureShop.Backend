@@ -44,7 +44,7 @@ namespace FurnitureShop.Domain.Services.Implementation
             await userRepository.AddAsync(user);
             await userRepository.SaveChangesAsync();
 
-            return Result.Ok(mapper.Map<UserForRegistrationDto>(user));
+            return Result.Ok(newUser);
         }
 
         public async Task<Result<TokensDto>> LoginAsync(UserForLoginDto loggingUser)
@@ -81,6 +81,11 @@ namespace FurnitureShop.Domain.Services.Implementation
                 .Include(u => u.RefreshTokens)
                 .Where(u => u.Email.Equals(userEmail))
                 .FirstOrDefaultAsync();
+
+            if(user is null)
+            {
+                return Result.Failed<TokensDto>("User not found");
+            }
 
             var updateResult = await refreshTokenService.UpdateRefreshTokenAsync(token, user);
 

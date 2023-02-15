@@ -2,7 +2,7 @@
 
 namespace FurnitureShop.Domain.Dtos.OrderProductDtos
 {
-    public class GetOrderProductDto
+    public class GetShoppingCartItemDto
     {
         public GetFurnitureDto Furniture { get; set; } = new GetFurnitureDto();
 

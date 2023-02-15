@@ -5,9 +5,11 @@
 
         public int Id { get; set; }
 
+        public int UserId { get; set; }
+
         public string Name { get; set; } = string.Empty;
 
-        public List<OrderProduct> Products { get; set; } = new List<OrderProduct>();
+        public ICollection<ShoppingCartItem> Products { get; set; } = new List<ShoppingCartItem>();
 
         public string CustomerName { get; set; } = string.Empty;
 
@@ -20,5 +22,7 @@
         public double TotalAmount { get; set; }
 
         public bool IsCompleted { get; set; } = false;
+
+        public User User { get; set; }
     }
 }

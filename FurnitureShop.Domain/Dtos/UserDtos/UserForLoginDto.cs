@@ -1,4 +1,6 @@
-﻿namespace FurnitureShop.Domain.Dtos.UserDtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FurnitureShop.Domain.Dtos.UserDtos
 {
     public class UserForLoginDto
     {

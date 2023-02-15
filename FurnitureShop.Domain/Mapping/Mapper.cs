@@ -21,7 +21,7 @@ namespace FurnitureShop.Domain.Mapping
             CreateMap<CreateOrderDto, Order>().ReverseMap();
             CreateMap<GetOrderDto, Order>().ReverseMap();
 
-            CreateMap<GetOrderProductDto, OrderProduct>().ReverseMap();
+            CreateMap<GetShoppingCartItemDto, ShoppingCartItem>().ReverseMap();
 
             CreateMap<UserForRegistrationDto, User>().ReverseMap();
         }

@@ -9,7 +9,7 @@ namespace FurnitureShop.Data.Context
         public DbSet<Dimensions> Dimensions => Set<Dimensions>();
         public DbSet<Order> Orders => Set<Order>();
 
-        public DbSet<OrderProduct> OrderProducts => Set<OrderProduct>();
+        public DbSet<ShoppingCartItem> OrderProducts => Set<ShoppingCartItem>();
 
         public DbSet<User> Users => Set<User>();
 

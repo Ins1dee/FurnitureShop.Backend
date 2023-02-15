@@ -1,4 +1,5 @@
 ﻿using FurnitureShop.Domain.Dtos.DimensionsDtos;
+using System.ComponentModel.DataAnnotations;
 
 namespace FurnitureShop.Domain.Dtos.FurnitureDtos
 {
@@ -12,6 +13,7 @@ namespace FurnitureShop.Domain.Dtos.FurnitureDtos
 
         public string Brand { get; set; } = string.Empty;
 
+        [Range(0, double.MaxValue)]
         public double Price { get; set; }
     }
 }

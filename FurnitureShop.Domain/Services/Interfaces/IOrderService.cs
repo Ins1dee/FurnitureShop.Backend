@@ -1,16 +1,17 @@
-﻿using FurnitureShop.Domain.Dtos.OrderDtos;
+﻿using FurnitureShop.Data.Entities;
+using FurnitureShop.Domain.Dtos.OrderDtos;
 using FurnitureShop.Domain.Models;
 
 namespace FurnitureShop.Domain.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<Result<List<GetOrderDto>>> CreateAsync(CreateOrderDto newOrder);
+        public Task<Result<List<GetOrderDto>>> CreateAsync(CreateOrderDto newOrder, string userEmail);
 
-        Task<Result<List<GetOrderDto>>> DeleteAsync(int id);
+        public Task<Result<List<GetOrderDto>>> DeleteAsync(int id);
 
-        Task<Result<GetOrderDto>> GetByIdAsync(int id);
+        public Task<Result<GetOrderDto>> GetByIdAsync(int id);
 
-        Task<Result<List<GetOrderDto>>> GetAllAsync();
+        public Task<Result<List<GetOrderDto>>> GetOrdersAsync(string userEmail);
     }
 }

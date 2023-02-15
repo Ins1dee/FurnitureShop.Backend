@@ -15,22 +15,25 @@ namespace FurnitureShop.Domain.Services.Implementation
     public class RefreshTokenService : IRefreshTokenService
     {
         private readonly IRepository<RefreshToken> refreshTokenRepository;
+        private readonly IRepository<User> userRepository;
         private readonly JwtSettings jwtSettings;
 
-        public RefreshTokenService(IRepository<RefreshToken> refreshTokenRepository, JwtSettings jwtSettings)
+        public RefreshTokenService(IRepository<RefreshToken> refreshTokenRepository, IRepository<User> userRepository, JwtSettings jwtSettings)
         {
             this.refreshTokenRepository = refreshTokenRepository;
+            this.userRepository = userRepository;
             this.jwtSettings = jwtSettings;
         }
 
         public async Task<RefreshToken> CreateRefreshTokenAsync(int userId)
         {
+            var user = await userRepository.GetByIdAsync(userId);
             var refreshToken =  new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
                 Expires = DateTime.Now.AddMinutes(jwtSettings.RefreshTokenExpirationTime),
                 Created = DateTime.Now,
-                UserId = userId
+                UserId = userId,
             };
 
             await refreshTokenRepository.AddAsync(refreshToken);
@@ -60,9 +63,9 @@ namespace FurnitureShop.Domain.Services.Implementation
                 return Result.Failed<RefreshToken>("Refresh token expired");
             }
 
-            if (user.RefreshTokens.Any(t => t.Token.Equals(refreshToken)))
+            if (!user.Equals(refreshToken.User))
             {
-                return Result.Failed<RefreshToken>($"Ivalid Refresh Token / {user.RefreshTokens.First().Token}");
+                return Result.Failed<RefreshToken>("Ivalid Refresh Token");
             }
 
             var data = await CreateRefreshTokenAsync(refreshToken.UserId);

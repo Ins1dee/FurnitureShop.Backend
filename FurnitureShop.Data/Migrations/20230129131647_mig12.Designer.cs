@@ -4,6 +4,7 @@ using FurnitureShop.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FurnitureShop.Data.Migrations
 {
     [DbContext(typeof(FurnitureStorageContext))]
-    partial class FurnitureStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20230129131647_mig12")]
+    partial class mig12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,6 +114,32 @@ namespace FurnitureShop.Data.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("FurnitureShop.Data.Entities.OrderProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("FurnitureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FurnitureId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderProducts");
+                });
+
             modelBuilder.Entity("FurnitureShop.Data.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -138,56 +166,6 @@ namespace FurnitureShop.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
-                });
-
-            modelBuilder.Entity("FurnitureShop.Data.Entities.ShoppingCart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("ShoppingCart");
-                });
-
-            modelBuilder.Entity("FurnitureShop.Data.Entities.ShoppingCartItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("FurnitureId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShoppingCartId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FurnitureId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ShoppingCartId");
-
-                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("FurnitureShop.Data.Entities.User", b =>
@@ -241,6 +219,25 @@ namespace FurnitureShop.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FurnitureShop.Data.Entities.OrderProduct", b =>
+                {
+                    b.HasOne("FurnitureShop.Data.Entities.Furniture", "Furniture")
+                        .WithMany()
+                        .HasForeignKey("FurnitureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FurnitureShop.Data.Entities.Order", "Order")
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Furniture");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("FurnitureShop.Data.Entities.RefreshToken", b =>
                 {
                     b.HasOne("FurnitureShop.Data.Entities.User", "User")
@@ -250,38 +247,6 @@ namespace FurnitureShop.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FurnitureShop.Data.Entities.ShoppingCart", b =>
-                {
-                    b.HasOne("FurnitureShop.Data.Entities.User", null)
-                        .WithOne("ShoppingCart")
-                        .HasForeignKey("FurnitureShop.Data.Entities.ShoppingCart", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FurnitureShop.Data.Entities.ShoppingCartItem", b =>
-                {
-                    b.HasOne("FurnitureShop.Data.Entities.Furniture", "Furniture")
-                        .WithMany()
-                        .HasForeignKey("FurnitureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FurnitureShop.Data.Entities.Order", null)
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId");
-
-                    b.HasOne("FurnitureShop.Data.Entities.ShoppingCart", "ShoppingCart")
-                        .WithMany("Items")
-                        .HasForeignKey("ShoppingCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Furniture");
-
-                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("FurnitureShop.Data.Entities.Furniture", b =>
@@ -295,19 +260,11 @@ namespace FurnitureShop.Data.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("FurnitureShop.Data.Entities.ShoppingCart", b =>
-                {
-                    b.Navigation("Items");
-                });
-
             modelBuilder.Entity("FurnitureShop.Data.Entities.User", b =>
                 {
                     b.Navigation("Orders");
 
                     b.Navigation("RefreshTokens");
-
-                    b.Navigation("ShoppingCart")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

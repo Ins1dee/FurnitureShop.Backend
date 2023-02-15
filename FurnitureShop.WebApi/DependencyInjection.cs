@@ -1,6 +1,10 @@
-﻿using FurnitureShop.Data.Context;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using FurnitureShop.Data.Context;
 using FurnitureShop.Data.Entities;
 using FurnitureShop.Data.Infrastructure;
+using FurnitureShop.Domain.Dtos.UserDtos;
+using FurnitureShop.Domain.FluentValidation;
 using FurnitureShop.Domain.Models;
 using FurnitureShop.Domain.Services.Implementation;
 using FurnitureShop.Domain.Services.Interfaces;
@@ -10,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace FurnitureShop.WebApi.Extensions
+namespace FurnitureShop.WebApi
 {
     public static class DependencyInjection
     {
@@ -18,18 +22,18 @@ namespace FurnitureShop.WebApi.Extensions
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy", builder => 
+                options.AddPolicy("CorsPolicy", builder =>
                 builder.AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
             });
-        }   
+        }
 
         public static void ConfigureDbServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<FurnitureStorageContext>(options =>
-                  options.UseSqlServer(configuration.GetConnectionString("sqlConnection"), 
-                  x => x.MigrationsAssembly("FurnitureStorage.Data")));
+                  options.UseSqlServer(configuration.GetConnectionString("sqlConnection"),
+                  x => x.MigrationsAssembly("FurnitureShop.Data")));
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -39,11 +43,13 @@ namespace FurnitureShop.WebApi.Extensions
             services.AddScoped<IPasswordHasherService, PasswordHasherService>();
             services.AddScoped<IAccessTokenService, AccessTokenService>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
             services.AddScoped<IRepository<Furniture>, Repository<Furniture>>();
             services.AddScoped<IRepository<Order>, Repository<Order>>();
             services.AddScoped<IRepository<User>, Repository<User>>();
             services.AddScoped<IRepository<RefreshToken>, Repository<RefreshToken>>();
+            services.AddScoped<IRepository<ShoppingCart>, Repository<ShoppingCart>>();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
@@ -71,6 +77,14 @@ namespace FurnitureShop.WebApi.Extensions
                     ClockSkew = TimeSpan.Zero
                 };
             });
+        }
+
+        public static void ConfigureFluentValidation(this IServiceCollection services)
+        {
+            services.AddFluentValidation();
+
+            services.AddScoped<IValidator<UserForRegistrationDto>, UserForRegistrationDtoValidator>();
+            services.AddScoped<IValidator<UserForLoginDto>, UserForLoginDtoValidator>();
         }
     }
 }
